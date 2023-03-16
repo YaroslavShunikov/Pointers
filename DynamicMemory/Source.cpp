@@ -6,13 +6,17 @@ using std::endl;
 
 #define tab "\t"
 #define delimiter "\n----------------------------------------------\n"
+//#define DynamicMemory1
+#define DynamicMemory2
 int** allocate(const int rows, const int cols);
 void clear(int** arr, const int rows);
 
 void FillRand(int arr[], const int n, int minRand=0, int maxRand=100);
 void FillRand(int** arr, const int rows, const int cols);
+
 void Print(int arr[], const int n);
 void Print(int** arr, const int rows, const int cols);
+
 int* push_back(int* arr, int& n, int value);
 int* push_front(int* arr, int& n, int value);
 int* Insert(int* arr, int& n, int value, int ix);			//вставл€ет в массив указанное значение по указанному индексу
@@ -24,14 +28,15 @@ int** push_row_back(int** arr, int& rows, const int cols);
 int** push_row_front(int** arr, int& rows, const int cols);
 int** insert(int** arr, int& rows, const int cols,const int ix);	//вставл€ет в массив указанное значение по указанному индексу
 int** pop_row_back(int** arr, int& rows, const int cols);			//удал€ет последнюю строку
-
+int** pop_row_front(int** arr, int& rows, const int cols);			//удал€ет последнюю строку
 void push_col_back(int** arr,const int rows,int& cols);
+void push_col_front(int** arr,const int rows,int& cols);
 
-//#define DynamicMemory1
-#define DynamicMemory2
+
 void main()
 {
 	setlocale(LC_ALL, "");
+	srand(time(NULL));
 #ifdef DynamicMemory1
 	int n;
 	cout << "¬ведите кол-во эл-ов:"; cin >> n;
@@ -63,18 +68,19 @@ void main()
 
 	delete[] arr;
 #endif
+#ifdef DynamicMemory2
 
 	int rows; //строки
 	int cols; //столбцы
 	cout << "¬ведите кол-во строк: "; cin >> rows;
 	cout << "¬ведите кол-во эл-ов строки: "; cin >> cols;
 
-	int** arr = allocate(rows,cols);
+	int** arr = allocate(rows, cols);
 
-	FillRand(arr,rows, cols);
-	Print(arr,rows, cols);
+	FillRand(arr, rows, cols);
+	Print(arr, rows, cols);
 	cout << delimiter << endl;
-	arr=push_row_back(arr, rows, cols);
+	arr = push_row_back(arr, rows, cols);
 	FillRand(arr[rows - 1], cols, 900, 1000);
 	Print(arr, rows, cols);
 	cout << delimiter << endl;
@@ -93,10 +99,21 @@ void main()
 	Print(arr, rows, cols);
 	cout << delimiter << endl;
 
+	arr = pop_row_front(arr, rows, cols);
+	Print(arr, rows, cols);
+	cout << delimiter << endl;
+
 	push_col_back(arr, rows, cols);
 	Print(arr, rows, cols);
+	cout << delimiter << endl;
+
+	push_col_front(arr, rows, cols);
+	Print(arr, rows, cols);
+	cout << delimiter << endl;
 
 	clear(arr, rows);
+#endif 
+
 }
 
 void FillRand(int arr[], const int n, int minRand , int maxRand )
@@ -224,6 +241,7 @@ int* Irase(int* arr, int& n, int ix)
 
 	return arr;
 }
+
 int** push_row_back(int** arr, int& rows, const int cols)
 {
 	int** buffer = new int*[rows+1];
@@ -260,9 +278,15 @@ int** insert(int** arr, int& rows, const int cols, const int ix)
 }
 int** pop_row_back(int** arr, int& rows, const int cols)
 {
-	delete[] arr[rows - 1];
 	int** buffer = new int* [--rows];
 	for (int i = 0; i < rows; i++)buffer[i] = arr[i];
+	delete[] arr;
+	return buffer;
+}
+int** pop_row_front(int** arr, int& rows, const int cols)
+{
+	int** buffer = new int* [--rows];
+	for (int i = 0; i < rows; i++)buffer[i] = arr[i+1];
 	delete[] arr;
 	return buffer;
 }
@@ -277,6 +301,21 @@ void push_col_back(int** arr,const int rows,int& cols)
 		}
 		delete[] arr[i];
 		arr[i] = buffer;
+	}
+	cols++;
+}
+void push_col_front(int** arr, const int rows, int& cols)
+{
+	for (int i = 0; i < rows; i++)
+	{
+		int* buffer = new int[cols + 1]{};
+		for (int j = 0; j < cols; j++)
+		{
+			buffer[j+1] = arr[i][j];
+		}
+		delete[] arr[i];
+		arr[i] = buffer;
+
 	}
 	cols++;
 }
