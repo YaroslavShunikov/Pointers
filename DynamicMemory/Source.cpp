@@ -27,7 +27,7 @@ template<typename T>T** push_row_front(T** arr, int& rows, const int cols);
 template<typename T>T** insert_row(T** arr, int& rows, const int cols,const int ix);	//вставляет в массив указанное значение по указанному индексу
 template<typename T>T** pop_row_back(T** arr, int& rows, const int cols);			//удаляет последнюю строку
 template<typename T>T** pop_row_front(T** arr, int& rows, const int cols);
-
+template<typename T>T** erase_row(T** arr, int& rows, const int cols, int ix);
 template<typename T>void push_col_back(T** arr,const int rows,int& cols);
 template<typename T>void push_col_front(T** arr, const int rows, int& cols);
 
@@ -103,8 +103,14 @@ void main()
 
 	push_col_back(arr, rows, cols);
 	Print(arr, rows, cols);
+	cout << delimiter << endl;
 
 	push_col_front(arr, rows, cols);
+	Print(arr, rows, cols);
+	cout << delimiter << endl;
+
+	cout << "Введите индекс удаляемой строки: "; cin >> ix;
+	arr = erase_row(arr, rows, cols, ix);
 	Print(arr, rows, cols);
 	cout << delimiter << endl;
 
@@ -314,4 +320,14 @@ template<typename T>void push_col_front(T** arr, const int rows, int& cols)
 
 	}
 	cols++;
+}
+template<typename T>T** erase_row(T** arr, int& rows, const int cols, int ix)
+{
+	T** buffer = new T* [--rows];
+	for (int i = 0; i < ix; i++)buffer[i] = arr[i];
+	for (int i = ix; i < rows; i++)buffer[i] = arr[i + 1];
+	delete[] arr;
+	arr = buffer;
+	return buffer;
+	delete[] arr;
 }
