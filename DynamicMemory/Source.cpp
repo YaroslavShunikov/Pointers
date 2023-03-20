@@ -26,6 +26,7 @@ template<typename T>T** push_row_back(T** arr, int& rows, const int cols);
 template<typename T>T** push_row_front(T** arr, int& rows, const int cols);
 template<typename T>T** insert_row(T** arr, int& rows, const int cols,const int ix);	//вставляет в массив указанное значение по указанному индексу
 template<typename T>T** pop_row_back(T** arr, int& rows, const int cols);			//удаляет последнюю строку
+template<typename T>T** pop_row_front(T** arr, int& rows, const int cols);
 
 template<typename T>void push_col_back(T** arr,const int rows,int& cols);
 template<typename T>void push_col_front(T** arr, const int rows, int& cols);
@@ -96,11 +97,16 @@ void main()
 	Print(arr, rows, cols);
 	cout << delimiter << endl;
 
+	arr = pop_row_front(arr, rows, cols);
+	Print(arr, rows, cols);
+	cout << delimiter << endl;
+
 	push_col_back(arr, rows, cols);
 	Print(arr, rows, cols);
 
 	push_col_front(arr, rows, cols);
 	Print(arr, rows, cols);
+	cout << delimiter << endl;
 
 	clear(arr, rows);
 }
@@ -270,6 +276,13 @@ template<typename T>T** pop_row_back(T** arr, int& rows, const int cols)
 	delete[] arr[rows - 1];
 	T** buffer = new T* [--rows];
 	for (int i = 0; i < rows; i++)buffer[i] = arr[i];
+	delete[] arr;
+	return buffer;
+}
+template<typename T>T** pop_row_front(T** arr, int& rows, const int cols)
+{
+	T** buffer = new T* [--rows];
+	for (int i = 0; i < rows; i++)buffer[i] = arr[i + 1];
 	delete[] arr;
 	return buffer;
 }
