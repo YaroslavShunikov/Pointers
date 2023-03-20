@@ -28,6 +28,7 @@ template<typename T>T** insert_row(T** arr, int& rows, const int cols,const int 
 template<typename T>T** pop_row_back(T** arr, int& rows, const int cols);			//удаляет последнюю строку
 
 template<typename T>void push_col_back(T** arr,const int rows,int& cols);
+template<typename T>void push_col_front(T** arr, const int rows, int& cols);
 
 //#define DynamicMemory1
 #define DynamicMemory2
@@ -96,6 +97,9 @@ void main()
 	cout << delimiter << endl;
 
 	push_col_back(arr, rows, cols);
+	Print(arr, rows, cols);
+
+	push_col_front(arr, rows, cols);
 	Print(arr, rows, cols);
 
 	clear(arr, rows);
@@ -280,6 +284,21 @@ template<typename T>void push_col_back(T** arr,const int rows,int& cols)
 		}
 		delete[] arr[i];
 		arr[i] = buffer;
+	}
+	cols++;
+}
+template<typename T>void push_col_front(T** arr, const int rows, int& cols)
+{
+	for (int i = 0; i < rows; i++)
+	{
+		int* buffer = new int[cols + 1]{};
+		for (int j = 0; j < cols; j++)
+		{
+			buffer[j + 1] = arr[i][j];
+		}
+		delete[] arr[i];
+		arr[i] = buffer;
+
 	}
 	cols++;
 }
